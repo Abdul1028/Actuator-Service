@@ -9,44 +9,17 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
 
-    private static final List<String> ALLOWED_ORIGINS = Arrays.asList(
-            "http://localhost:3000",
-            "https://localhost:3000",
-            "https://pushly.tech",
-            "http://pushly.tech",
-            "https://api.wareality.tech",
-            "http://api.wareality.tech"
-    );
-
-    private static final List<String> ALLOWED_METHODS = Arrays.asList(
-            "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"
-    );
-
-    private static final List<String> ALLOWED_HEADERS = Arrays.asList(
-            "Origin", "Content-Type", "Accept", "Authorization", "X-Requested-With"
-    );
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns(
-                        "http://localhost:3000",
-                        "https://localhost:3000",
-                        "https://pushly.tech",
-                        "http://pushly.tech",
-                        "https://*.pushly.tech",
-                        "http://*.pushly.tech",
-                        "https://api.wareality.tech",
-                        "http://api.wareality.tech"
-                )
-                .allowedMethods(ALLOWED_METHODS.toArray(new String[0]))
-                .allowedHeaders(ALLOWED_HEADERS.toArray(new String[0]))
-                .allowCredentials(true)
+                .allowedOriginPatterns("*")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD")
+                .allowedHeaders("*")
+                .allowCredentials(false)
                 .maxAge(3600);
     }
 
@@ -55,21 +28,11 @@ public class CorsConfig implements WebMvcConfigurer {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         
-        // Set allowed origins with patterns for subdomains
-        config.setAllowedOriginPatterns(Arrays.asList(
-                "http://localhost:3000",
-                "https://localhost:3000",
-                "https://pushly.tech",
-                "http://pushly.tech",
-                "https://*.pushly.tech",
-                "http://*.pushly.tech",
-                "https://api.wareality.tech",
-                "http://api.wareality.tech"
-        ));
-        
-        config.setAllowedMethods(ALLOWED_METHODS);
-        config.setAllowedHeaders(ALLOWED_HEADERS);
-        config.setAllowCredentials(true);
+        // Allow all origins
+        config.setAllowedOriginPatterns(Arrays.asList("*"));
+        config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"));
+        config.setAllowedHeaders(Arrays.asList("*"));
+        config.setAllowCredentials(false);
         config.setMaxAge(3600L);
         
         source.registerCorsConfiguration("/**", config);
